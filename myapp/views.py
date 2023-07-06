@@ -21,7 +21,7 @@ def HTMLTemplate(articleTag):
      return f'''
      <html>
      <body>
-         <h1><a href="/">Django</a></h1>
+         <h1><a href="/">Created by HTMLTemplate</a></h1>
          <ol>
              {ol}
          </ol>
@@ -35,8 +35,8 @@ def HTMLTemplate(articleTag):
 
 def index(request):
      article = '''
-     <h1>h1 tag</h1> 
-     Text
+     <h2>def index</h2> 
+     Text ...
      '''
      return HttpResponse(HTMLTemplate(article))
 
