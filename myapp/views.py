@@ -1,5 +1,11 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse
+from django.shortcuts import redirect
+
+from django.views.decorators.csrf import csrf_exempt
+
+
+next_id = 4
 
 # list_dict
 topics = [
@@ -22,10 +28,13 @@ def HTMLTemplate(articleTag):
      <html>
      <body>
          <h1><a href="/">Created by HTMLTemplate</a></h1>
-         <ol>
+         <ul>
              {ol}
-         </ol>
+         </ul>
          {articleTag}
+         <ul>
+            <li><a href="/create/">create</a></li>
+        </ul>
      </body>
      </html>
      '''
@@ -53,9 +62,35 @@ def read(request, id):
      return HttpResponse(HTMLTemplate(article))
 
 
+@csrf_exempt
+def create(request):
+    global next_id
 
-def create(request, id):
-    return HttpResponse('create' + id)
+    if request.method == 'GET':
+        article = '''
+            <form action="/create/" method ="post">
+                <p><input type = "text" name = "title" placeholder = "title"></p>
+                
+                <p><textarea name = "body" placeholder = "body"></textarea></p>
+                
+                <p><input type = "submit"></p>
+            </form>
+        '''
+        return HttpResponse(HTMLTemplate(article))
+    
+    elif request.method == 'POST':
+        
+        title = request.POST['title']
+        body = request.POST['body']
+        
+        newTopic = {"id":next_id, "title":title, "body":body}
+        topics.append(newTopic)
+       
+        url = '/read/'+str(next_id)
+       
+        next_id = next_id + 1
+        
+        return redirect(url)
 
 
 def update(request):
