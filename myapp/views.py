@@ -16,9 +16,26 @@ topics = [
 
 
 # HTML Templeate
-def HTMLTemplate(articleTag, id=None):
+#  홈 id = None
+
+def HTMLTemplate(articleTag, id = None):
      global topics
      
+     # id 값이 존재하면 delete 처리 
+     contextUI = ''
+
+     if id != None:
+         contextUI = f'''
+            <li>
+                <form action="/delete/" method="post">
+                    <input type="hidden" name="id" value={id}>
+                    <input type="submit" value="delete">
+                </form>
+            </li>
+
+         '''
+         
+
      ol = ''
      
      for topic in topics:
@@ -34,12 +51,7 @@ def HTMLTemplate(articleTag, id=None):
          {articleTag}
          <ul>
             <li><a href="/create/">create</a></li>
-            <li>
-                <form action="/delete/" method="post">
-                    <input type="hidden" name="id" value={id}>
-                    <input type="submit" value="delete">
-                </form>
-            </li>
+            {contextUI}
             
         </ul>
      </body>
@@ -100,11 +112,6 @@ def create(request):
         return redirect(url)
 
 
-def update(request):
-    return HttpResponse('update')
-
-
-
 @csrf_exempt
 def delete(request):
     global topics
@@ -118,3 +125,8 @@ def delete(request):
         topics = newTopics
         
         return redirect('/') 
+    
+
+
+def update(request):
+    return HttpResponse('update')
