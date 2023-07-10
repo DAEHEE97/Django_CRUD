@@ -19,13 +19,13 @@ topics = [
 #  홈 id = None
 
 def HTMLTemplate(articleTag, id = None):
-     global topics
+    global topics
      
-     # id 값이 존재하면 delete 처리 
-     contextUI = ''
-
-     if id != None:
-         contextUI = f'''
+    # id 값이 존재하면 delete 처리 
+    contextUI = ''
+    
+    if id != None:
+        contextUI = f'''
             <li>
                 <form action="/delete/" method="post">
                     <input type="hidden" name="id" value={id}>
@@ -36,27 +36,26 @@ def HTMLTemplate(articleTag, id = None):
          '''
          
 
-     ol = ''
+    ol = ''
      
-     for topic in topics:
-         ol += f'<li><a href="/read/{topic["id"]}">{topic["title"]}</a></li>'
+    for topic in topics:
+        ol += f'<li><a href="/read/{topic["id"]}">{topic["title"]}</a></li>'
      
-     return f'''
-     <html>
-     <body>
-         <h1><a href="/">Created by HTMLTemplate</a></h1>
-         <ul>
-             {ol}
-         </ul>
-         {articleTag}
-         <ul>
+    return f'''
+    <html>
+    <body>
+        <h1><a href="/">Created by HTMLTemplate</a></h1>
+        <ul>
+            {ol}
+        </ul>
+        {articleTag}
+        <ul>
             <li><a href="/create/">create</a></li>
             {contextUI}
-            
         </ul>
-     </body>
-     </html>
-     '''
+    </body>
+    </html>
+    '''
 
 
 # Create your views here.
