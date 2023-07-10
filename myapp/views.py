@@ -32,6 +32,8 @@ def HTMLTemplate(articleTag, id = None):
                     <input type="submit" value="delete">
                 </form>
             </li>
+            <li><a href="/update/{id}">update</a></li>
+
 
          '''
          
@@ -127,5 +129,39 @@ def delete(request):
     
 
 
-def update(request):
-    return HttpResponse('update')
+@csrf_exempt
+def update(request, id):
+    
+    global topics
+    # update 링크 클릭시 
+    if request.method == 'GET':
+        
+        for topic in topics:
+            if topic['id'] == int(id):
+                selectedTopic = {
+                    "title":topic['title'],
+                    "body":topic['body']
+                }
+        
+        article = f'''
+            <form action="/update/{id}/" method="post">
+                <p><input type="text" name="title" placeholder="title" value={selectedTopic["title"]}></p>
+                <p><textarea name="body" placeholder="body">{selectedTopic['body']}</textarea></p>
+                <p><input type="submit"></p>
+            </form>
+        '''
+        return HttpResponse(HTMLTemplate(article, id))
+    
+    # update 제출 시 
+    elif request.method == 'POST':
+        
+        title = request.POST['title']
+        body = request.POST['body']
+        
+        for topic in topics:
+            
+            if topic['id'] == int(id):
+                topic['title'] = title
+                topic['body'] = body
+        
+        return redirect(f'/read/{id}')
